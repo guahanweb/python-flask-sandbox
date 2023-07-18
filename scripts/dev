@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export PROJECT_ROOT="$( dirname "${DIR}" )"
+
+[[ -f ~/.bashrc ]] && source ~/.bashrc
+[[ -f ${DIR}/settings.sh ]] && source ${DIR}/settings.sh
+[[ -f ${DIR}/utils.sh ]] && source ${DIR}/utils.sh
+
+function usage() {
+    local error=${1:-""}
+    local scriptname=$( basename "$0" )
+
+    echo ""
+    echo "${YELLOW}usage:${NC} ${scriptname} <command>"
+    echo ""
+
+    if [[ ! -z "${error}" ]]
+    then
+        echo "${RED}[error]${NC} ${error}"
+    fi
+}
+
+function activate() {
+    cd ${PROJECT_ROOT}
+    if [[ ! -d .venv ]]
+    then
+        python -m venv .venv
+    fi
+    . .venv/bin/activate
+}
+
+if [ "$#" -gt 0 ]
+then
+    CMD=${1}
+    shift
+
+    case "${CMD}" in
+        setup )
+            activate
+            pip install -r requirements.txt
+            deactivate
+            ;;
+
+        dev )
+            activate
+            flask run
+            deactivate
+            ;;
+
+        serve )
+            activate
+            gunicorn --bind 0.0.0.0:5000 wsgi:app
+            deactivate
+            ;;
+    esac
+else
+    usage "the following arguments are required: command"
+    exit 1
+fi
