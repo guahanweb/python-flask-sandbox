@@ -52,19 +52,21 @@ then
     case "${CMD}" in
         setup )
             activate
-            pip install -r requirements.txt
+            if [[ -f requirements.txt ]]; then
+                pip install -r requirements.txt
+            fi
             deactivate
             ;;
 
         dev )
             activate
-            flask run
+            flask --app src/app run
             deactivate
             ;;
 
         serve )
             activate
-            gunicorn --bind 0.0.0.0:5000 wsgi:app
+            gunicorn --chdir ${PROJECT_ROOT}/src --bind 0.0.0.0:5000 wsgi:app
             deactivate
             ;;
     esac
