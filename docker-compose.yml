@@ -21,7 +21,10 @@ services:
       dockerfile: Dockerfile
     container_name: python-sandbox
     environment:
-      - DYNAMODB_ENDPOINT=http://localstack
+      - DYNAMODB_ENDPOINT=http://localstack:4566
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=foobar
+      - AWS_SECRET_ACCESS_KEY=foobar
     volumes:
       - "./src/static:/app/static"
       - "./src/templates:/app/templates"
