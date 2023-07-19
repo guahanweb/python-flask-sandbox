@@ -60,7 +60,7 @@ then
 
         dev )
             activate
-            flask --app src/app run
+            flask --app src/app --debug run --extra-files templates:static
             deactivate
             ;;
 

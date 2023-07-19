@@ -22,3 +22,7 @@ services:
     container_name: python-sandbox
     environment:
       - DYNAMODB_ENDPOINT=http://localstack
+    volumes:
+      - "./src/static:/app/static"
+      - "./src/templates:/app/templates"
+      - "./src/app.py:/app/app.py"

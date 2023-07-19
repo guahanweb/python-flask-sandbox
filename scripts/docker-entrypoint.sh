@@ -9,5 +9,5 @@
 
 # start up the actual python app for testing
 cd /app
-python app.py
+python -m flask --debug run --extra-files templates:static
 echo "done... cleaning up!"
